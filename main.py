@@ -57,6 +57,24 @@ main water valve first, then offer an emergency callout."""
 app = FastAPI()
 
 
+class PhoneAudio:
+    """Converts one reply at a time from 24 kHz PCM16 to 8 kHz mu-law, the only format Twilio plays."""
+
+    def __init__(self):
+        self.response_id = None
+        self.resampler = None
+
+    def start(self, response_id):
+        # A fresh resampler per reply, so no filter state leaks from a cancelled one.
+        self.response_id = response_id
+        self.resampler = soxr.ResampleStream(24000, 8000, 1, dtype="int16")
+
+    def convert(self, delta):
+        pcm_24k = np.frombuffer(base64.b64decode(delta), dtype=np.int16)
+        pcm_8k = self.resampler.resample_chunk(pcm_24k)
+        return base64.b64encode(audioop.lin2ulaw(pcm_8k.tobytes(), 2)).decode()
+
+
 @app.post("/incoming-call")
 async def incoming_call(request: Request):
     """Answer the call by connecting it to our media stream."""
@@ -161,24 +179,6 @@ async def media_stream(twilio: WebSocket):
             task.cancel()
     await twilio.close()
     print("[call] ended")
-
-
-class PhoneAudio:
-    """Converts one reply at a time from 24 kHz PCM16 to 8 kHz mu-law, the only format Twilio plays."""
-
-    def __init__(self):
-        self.response_id = None
-        self.resampler = None
-
-    def start(self, response_id):
-        # A fresh resampler per reply, so no filter state leaks from a cancelled one.
-        self.response_id = response_id
-        self.resampler = soxr.ResampleStream(24000, 8000, 1, dtype="int16")
-
-    def convert(self, delta):
-        pcm_24k = np.frombuffer(base64.b64decode(delta), dtype=np.int16)
-        pcm_8k = self.resampler.resample_chunk(pcm_24k)
-        return base64.b64encode(audioop.lin2ulaw(pcm_8k.tobytes(), 2)).decode()
 
 
 if __name__ == "__main__":
