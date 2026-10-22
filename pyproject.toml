@@ -1,0 +1,14 @@
+[project]
+name = "dialog-rsn-1-twilio"
+version = "0.1.0"
+description = "Answer phone calls with Twilio Voice and PolyAI's Dialog-RSN-1"
+requires-python = ">=3.13"
+dependencies = [
+    "audioop-lts>=0.2.1",
+    "fastapi>=0.115",
+    "numpy>=2.1",
+    "python-dotenv>=1.0",
+    "soxr>=0.5",
+    "uvicorn>=0.32",
+    "websockets>=15.0",
+]
