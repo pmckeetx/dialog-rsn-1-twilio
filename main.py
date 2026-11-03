@@ -152,9 +152,8 @@ async def media_stream(twilio: WebSocket):
                             "media": {"payload": to_phone.convert(event["delta"])},
                         })
 
-                    # Dialog-RSN-1 only sends this once it's sure the caller is talking, not on an
-                    # echo or a cough. If Rosa was speaking, it has already cancelled her reply.
-                    # Twilio still holds the audio we sent ahead, so tell it to drop that too.
+                    # Sent when the caller starts a turn. If Rosa was speaking, the server is cancelling
+                    # her reply. Twilio still holds the audio we sent ahead, so tell it to drop that too.
                     case "input_audio_buffer.speech_started":
                         if to_phone.response_id:
                             interrupted.add(to_phone.response_id)

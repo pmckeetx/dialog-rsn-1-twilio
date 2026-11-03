@@ -45,6 +45,6 @@ It speaks three lines as the caller with macOS `say`, talks over Rosa's second a
 - **Out:** Dialog-RSN-1 speaks 24 kHz PCM16. The bridge resamples to 8 kHz with soxr, which filters out
   everything above the phone band first, and encodes mu-law with `audioop` (the `audioop-lts` package on
   Python 3.13+).
-- **Barge-in:** `input_audio_buffer.speech_started` only arrives once Dialog-RSN-1 is sure the caller is
-  talking, and by then it has cancelled the reply. The bridge sends Twilio a `clear` to drop the audio it has
+- **Barge-in:** `input_audio_buffer.speech_started` arrives when the caller starts a turn. If Rosa was
+  speaking, the server is cancelling her reply. The bridge sends Twilio a `clear` to drop the audio it has
   queued.
