@@ -4,7 +4,7 @@ Call a Twilio number and Rosa, the phone assistant for a fictional Denver plumbe
 the call to a small FastAPI server, which bridges it to PolyAI's Dialog-RSN-1 API. Dialog-RSN-1 hears the
 caller, decides when they've finished and writes the reply, and the API speaks it.
 
-Tutorial: *Connect a phone number to a Dialog-RSN-1 voice agent with Twilio and Python* (link coming when it's published).
+Tutorial: [Connect a phone number to a Dialog-RSN-1 voice agent with Twilio and Python](https://www.petermckee.dev/blog/connect-a-phone-number-to-a-dialog-rsn-1-voice-agent).
 
 | File | What it does |
 |---|---|
