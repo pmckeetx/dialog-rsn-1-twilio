@@ -4,7 +4,7 @@ Call a Twilio number and Rosa, the phone assistant for a fictional Denver plumbe
 the call to a small FastAPI server, which bridges it to PolyAI's Dialog-RSN-1 API. Dialog-RSN-1 hears the
 caller, decides when they've finished and writes the reply, and the API speaks it.
 
-Tutorial: *Build an AI Voice Assistant with Twilio Voice, PolyAI's Dialog-RSN-1 API, and Python*.
+Tutorial: *Connect a phone number to a Dialog-RSN-1 voice agent with Twilio and Python* (link coming when it's published).
 
 | File | What it does |
 |---|---|
@@ -15,8 +15,8 @@ Tutorial: *Build an AI Voice Assistant with Twilio Voice, PolyAI's Dialog-RSN-1 
 ## Run it
 
 You need Python 3.13+ and [uv](https://docs.astral.sh/uv/), a Dialog-RSN-1 key from
-[studio.poly.ai](https://studio.poly.ai), a Twilio account with a voice-capable number, and
-[ngrok](https://ngrok.com).
+[studio.poly.ai](https://studio.poly.ai), an upgraded Twilio account with a voice-capable number (trial
+accounts strip the `<Stream>` verb), and [ngrok](https://ngrok.com) with its authtoken set.
 
 ```bash
 cp .env.example .env    # add your POLY_API_KEY
@@ -25,12 +25,12 @@ uv run main.py          # listens on :5050
 ngrok http 5050         # in a second terminal
 ```
 
-In the Twilio Console, open your number, and under **Voice Configuration** set **A call comes in** to
-**Webhook**, `https://<your-ngrok-host>/incoming-call`, **HTTP POST**. Save, then call the number.
+In the Twilio Console, open your number's voice configuration and set the incoming call webhook to
+`https://<your-ngrok-host>/incoming-call` with **HTTP POST**. Save, then call the number.
 
 ## Test without a phone
 
-With `main.py` running:
+With `main.py` running (macOS only: the caller's lines come from `say`):
 
 ```bash
 uv run fake_call.py
